@@ -7,7 +7,9 @@ from rest_framework import filters
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.renderers import TemplateHTMLRenderer
 
+from django.shortcuts import render
 from accounts import serializer, models, permissions
 
 
@@ -29,6 +31,11 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 class UserLoginApiView(ObtainAuthToken):
     """Handle creating user authentcation tokens"""
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
-from django.shortcuts import render
 
-# Create your views here.
+class Login(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'accounts/login.html'
+
+    def get(self, request):
+        queryset = models.UserProfileInfo.objects.all()
+        return Response({'profiles': queryset})

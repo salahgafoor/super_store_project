@@ -21,7 +21,7 @@ app_name = 'accounts'
 from rest_framework.routers import DefaultRouter
 
 from accounts import views
-
+from rest_framework.authtoken import views as auth_views
 router = DefaultRouter()
 #router.register('hello-viewset',views.HelloViewSet,base_name='hello-viewset')#name of url
 router.register('profile',views.UserProfileViewSet) #no need of base_name since there is a queryset
@@ -30,5 +30,6 @@ router.register('profile',views.UserProfileViewSet) #no need of base_name since 
 urlpatterns = [
     path('',include(router.urls)),
     path('login/', views.UserLoginApiView.as_view()),
-
+    path('login2/', views.Login.as_view()),
+    path('api-token-auth/', auth_views.obtain_auth_token, name='api-tokn-auth'), 
 ]
