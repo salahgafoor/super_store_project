@@ -29,6 +29,10 @@ router.register('profile',views.UserProfileViewSet) #no need of base_name since 
 
 urlpatterns = [
     path('',include(router.urls)),
+    re_path(r'^index/$',views.dashboardView,name='dashboardView'),
+    re_path(r'login/$', auth_views.LoginView.as_view(template_name="accounts/login.html"),name="login"),
+    re_path(r'logout/$', auth_views.LogoutView.as_view(), name="logout"),    
+    re_path(r'signup/$', views.SignUp.as_view(), name="signup"),
     #re_path(r'^signin/$', views.LoginView.as_view(template_name='rest_framework/login.html'), name='login'),
     #path(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     #path(r'^login', login, template_name, name='login'),

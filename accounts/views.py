@@ -12,9 +12,20 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework import generics
 from .serializer import *
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from accounts import serializer, models, permissions
 from .permissions import IsOwnerAndAuth
+from django.views.generic import CreateView
+from . import forms
 
+def dashboardView(request):
+    return render(request, 'accounts/dashboard.html')
+
+class SignUp(CreateView):
+    form_class = forms.UserCreateForm
+    success_url = reverse_lazy("accounts:login")
+    template_name = "accounts/signup.html"
+    
 class UserProfileViewSet(viewsets.ModelViewSet):
     """Handle creating and updating profiles"""
     serializer_class = serializer.UserProfileSerializer
