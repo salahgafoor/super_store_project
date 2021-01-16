@@ -50,3 +50,20 @@ class UserProfileInfo(AbstractBaseUser,PermissionsMixin):
     def __str__(self):
         """Return string representation of our user"""
         return self.email
+    
+class Product(models.Model):
+    name = models.CharField(max_length=255) 
+    description = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='products')
+    price = models.IntegerField() 
+
+    def __str__(self):
+        return self.name   
+        
+class Order(models.Model):
+    userprofileinfo = models.ForeignKey(UserProfileInfo,related_name='orders',on_delete=models.DO_NOTHING,)        
+    product = models.ManyToManyField(Product)   
+    total_amount = models.IntegerField() 
+
+    def __str__(self):
+        return self.userprofileinfo.name   

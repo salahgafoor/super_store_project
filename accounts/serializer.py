@@ -34,14 +34,60 @@ class UserProfileSerializer(serializers.ModelSerializer):
             instance.set_password(password)
 
         return super().update(instance, validated_data)
+
+
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Product
+        fields = [
+            "id",
+            "name",
+            "description",
+            "image",
+            "price",
+        ]
+
+    def get_image(self, obj):
+        try:
+            return obj.productimage_set.first().image.url
+        except:
+            return None
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField()
+    class Meta:
+        model = models.Product
+        fields = [
+            "id",
+            "name",
+            "description",
+            "image",
+            "price",
+        ]
+
+    def get_image(self, obj):
+        return obj.productimage_set.first().image.url            
         
-class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField(
-        max_length=100,
-        style={'placeholder': 'Email', 'autofocus': True}
-    )
-    password = serializers.CharField(
-        max_length=100,
-        style={'input_type': 'password', 'placeholder': 'Password'}
-    )
-    remember_me = serializers.BooleanField()        
+        
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Order
+        fields = [
+            "id",
+            "name",
+            "description",
+            "image",
+            "price",
+        ]
+
+class OrderDetailSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='userprofileinfo.name')
+    class Meta:
+        model = models.Order
+        fields = [
+            "name",
+            "product",
+            "total_amount",
+        ]
+                 

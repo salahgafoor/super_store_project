@@ -29,10 +29,17 @@ router.register('profile',views.UserProfileViewSet) #no need of base_name since 
 
 urlpatterns = [
     path('',include(router.urls)),
-    path(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path(r'^login', login, template_name, name='login'),
+    #re_path(r'^signin/$', views.LoginView.as_view(template_name='rest_framework/login.html'), name='login'),
+    #path(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    #path(r'^login', login, template_name, name='login'),
     #url(r'^logout', logout, template_name, name='logout'),
-    #path('login/', views.UserLoginApiView.as_view()),
+    path('login/', views.UserLoginApiView.as_view()),
     #path('login2/', views.Login.as_view()),
     path('api-token-auth/', auth_views.obtain_auth_token, name='api-tokn-auth'), 
+    
+    re_path(r'^api/products/$', views.ProductListAPIView.as_view(), name='products'),
+    re_path(r'^api/products/(?P<pk>\d+)/$', views.ProductRetrieveAPIView.as_view(), name='product_detail'),
+    
+    re_path(r'^api/orders/$', views.OrderListAPIView.as_view(), name='orders_api'),
+    re_path(r'^api/orders/(?P<pk>\d+)/$', views.OrderRetrieveAPIView.as_view(), name='order_detail_api'),
 ]
