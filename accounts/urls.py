@@ -36,6 +36,7 @@ urlpatterns = [
     path('login/', views.UserLoginApiView.as_view()),
     path('api-token-auth/', rest_auth_views.obtain_auth_token, name='api-tokn-auth'), 
     
+    path('product/<pk>/', views.ProductView.as_view(), name='product'),
     # API
     re_path(r'^api/products/$', views.ProductListAPIView.as_view(), name='products'),
     re_path(r'^api/products/(?P<pk>\d+)/$', views.ProductRetrieveAPIView.as_view(), name='product_detail'),    

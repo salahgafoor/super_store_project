@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'accounts/base.html' %}
 
 {% block content %}
 
@@ -12,7 +12,7 @@
         <!--Grid column-->
         <div class="col-md-6 mb-4">
 
-          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Vertical/12.jpg" class="img-fluid" alt="">
+          <img src="{{ object.image.url }}" class="img-fluid" alt="">
 
         </div>
         <!--Grid column-->
@@ -36,11 +36,11 @@
 
             {% if object.discount_price %}
               <span class="mr-1">
-              <del>${{ object.price }}</del>
+              <del>&#8377;{{ object.price }}</del>
               </span>
-              <span>${{ object.discount_price }}</span>
+              <span>&#8377;{{ object.discount_price }}</span>
             {% else %}
-             <span>${{ object.price }}</span>
+             <span>&#8377;{{ object.price }}</span>
             {% endif %}
 
             </p>

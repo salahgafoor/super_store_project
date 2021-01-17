@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
 from django.conf import settings    #to import AUTH_USER_MODEL
-
+from django.urls  import reverse
 class UserProfileManager(BaseUserManager):
     """Manager for user profiles"""
     def create_user(self, email, name, password=None):
@@ -57,6 +57,11 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products')
     price = models.IntegerField() 
 
+    def get_absolute_url(self):
+        return reverse("accounts:product", kwargs={     # this will redirected to urls.py namespace = product
+            "pk" : self.pk
+        })
+        
     def __str__(self):
         return self.name   
         

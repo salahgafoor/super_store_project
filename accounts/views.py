@@ -15,13 +15,17 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from accounts import serializer, models, permissions
 from .permissions import IsOwnerAndAuth
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DetailView
 from . import forms
 
 class dashboardView(ListView):
     model = models.Product
     template_name = "accounts/dashboard.html"
 
+class ProductView(DetailView):
+    model = models.Product
+    template_name = "accounts/product.html"
+    
 class SignUp(CreateView):
     form_class = forms.UserCreateForm
     success_url = reverse_lazy("accounts:login")

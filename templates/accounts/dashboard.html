@@ -116,18 +116,20 @@
               <!--Card image-->
 
               <!--Card content-->
+              <a href="{{ product.get_absolute_url }}">
               <div class="card-body text-center">
                 <h5>
                   <strong>
-                    <a href="" class="dark-grey-text">{{ product.name }}</a>
+                    <span class="dark-grey-text">{{ product.name }}</span>
                   </strong>
                 </h5>
 
                 <h4 class="font-weight-bold blue-text">
                   <strong>&#8377;{{ product.price }}</strong>
                 </h4>
-
+                
               </div>
+              </a>
               <!--Card content-->
 
             </div>
