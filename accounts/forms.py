@@ -4,10 +4,10 @@ from django.contrib.auth.forms import UserCreationForm
 
 class UserCreateForm(UserCreationForm):
     class Meta:
-        fields = ("username", "password1")
+        fields = ("email", "name", "password1")
         model = get_user_model()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["username"].label = "Username"
+        self.fields["email"].label = "Email"
         #del self.fields['password2']
