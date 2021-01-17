@@ -5,15 +5,20 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
 from django.urls import reverse_lazy
 from accounts import serializer, models, permissions
-from django.views.generic import CreateView, ListView, DetailView
+from django.views.generic import CreateView, ListView, DetailView, View
 from . import forms
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404,redirect, render
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
+from . models import *
 
 class dashboardView(ListView):
-    model = models.Product
+    model = Product
     template_name = "accounts/dashboard.html"
 
 class ProductView(DetailView):
-    model = models.Product
+    model = Product
     template_name = "accounts/product.html"
     
 class SignUp(CreateView):
@@ -24,7 +29,7 @@ class SignUp(CreateView):
 class UserProfileViewSet(viewsets.ModelViewSet):
     """Handle creating and updating profiles"""
     serializer_class = serializer.UserProfileSerializer
-    queryset = models.UserProfileInfo.objects.all()
+    queryset = UserProfileInfo.objects.all()
     
     # enable authentication; one user can modify only his details
     authentication_classes = (TokenAuthentication,)
@@ -40,7 +45,7 @@ class UserLoginApiView(ObtainAuthToken):
 
 class ProductListAPIView(generics.ListAPIView):
     #permission_classes = [IsAuthenticated]
-    queryset = models.Product.objects.all()
+    queryset = Product.objects.all()
     serializer_class = serializer.ProductSerializer
     filter_backends = [
                     filters.SearchFilter, 
@@ -54,32 +59,70 @@ class ProductListAPIView(generics.ListAPIView):
 
 
 class ProductRetrieveAPIView(generics.RetrieveAPIView):
-    queryset = models.Product.objects.all()
+    queryset = Product.objects.all()
     serializer_class = serializer.ProductDetailSerializer
 
 
 class OrderRetrieveAPIView(generics.RetrieveAPIView):
     authentication_classes = [SessionAuthentication]
     #permission_classes = [IsOwnerAndAuth]
-    model = models.Order
-    queryset = models.Order.objects.all()
+    model = Order
+    queryset = Order.objects.all()
     serializer_class = serializer.OrderDetailSerializer
 
     def get_queryset(self, *args, **kwargs):
-        return models.Order.objects.all() #filter(user__user=self.request.user)
+        return Order.objects.all() #filter(user__user=self.request.user)
 
 
 class OrderListAPIView(generics.ListAPIView):
     authentication_classes = [SessionAuthentication]
     #permission_classes = [IsOwnerAndAuth]
-    model = models.Order
-    queryset = models.Order.objects.all()
+    model = Order
+    queryset = Order.objects.all()
     serializer_class = serializer.OrderDetailSerializer
 
     def get_queryset(self, *args, **kwargs):
         print("Errrororo jhshdwewe")
         print(self.request)
-        return models.Order.objects.all() #filter(user__user=self.request.userprofileinfo)
+        return Order.objects.all() #filter(user__user=self.request.userprofileinfo)
 
     def post(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+
+# Cart Views
+@login_required
+def add_to_cart(request, pk):
+    """ 
+    adding products from product.html to cart (Flow: models.py->urls.py->views.py(this function))
+    """
+    product = get_object_or_404(Product, pk=pk )
+    order_item, created = OrderItem.objects.get_or_create(
+        product = product,
+        user = request.user,
+        ordered = False
+    )
+    order_qs = Order.objects.filter(userprofileinfo=request.user, ordered=False)
+
+    if order_qs.exists():
+        order = order_qs[0]
+        order.products.add(order_item)
+        return redirect("accounts:cart-items")
+    else: 
+        order = Order.objects.create(user=request.user)
+        order.products.add(order_item)
+        return redirect("accounts:cart-items")
+    
+class CartItemsView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+
+        try:
+            order = Order.objects.get(userprofileinfo=self.request.user, ordered=False)
+            context = {
+                'object': order
+            }
+            print(order)
+            return render(self.request, 'accounts/cart_items.html', context)
+        except ObjectDoesNotExist:
+            print("You do not have an order")
+            return redirect("/")

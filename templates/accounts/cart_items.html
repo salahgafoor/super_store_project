@@ -1,0 +1,68 @@
+{% extends 'accounts/base.html' %}
+
+{% block content %}
+
+<main>
+    <div class= "container">
+        <div class="table-responsive text-nowrap">
+    <h3>
+        <strong>Your Cart</strong>
+    </h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Item Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for order_item in object.products.all %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ order_item.product.name }}</td>
+            <td>
+           &#8377;{{ order_item.product.price}}
+
+            </td>
+            <td>
+            {{ order_item.quantity}}
+            </td>
+        </tr>
+
+        {% empty %}
+        <tr>
+            <td colspan="4">Your cart is Empty</td>
+        </tr>
+
+         <tr>
+            <td colspan="4">
+                <a href="/" class="btn btn-primary float-right">Continue Shopping</a>
+            </td>
+        </tr>
+
+        {% endfor %}
+
+        {% if object.cal_total_amount %}
+        <tr>
+            <td colspan="2"><b>Total Order Price</b></td>
+            <td>&#8377;{{ object.cal_total_amount }}</td>
+        </tr>
+         <tr>
+            <td colspan="4">
+                <a href="{% url 'accounts:cart-items' %}" class="btn btn-success float-right ml-2">Checkout</a>
+                <a href="/" class="btn btn-primary float-right">Continue Shopping</a>
+            </td>
+        </tr>
+        
+        {% endif %}
+        
+        </tbody>
+    </table>
+
+        </div>
+    </div>
+</main>
+
+{% endblock content %}

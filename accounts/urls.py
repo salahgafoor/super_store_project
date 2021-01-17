@@ -36,6 +36,8 @@ urlpatterns = [
     path('api-token-auth/', rest_auth_views.obtain_auth_token, name='api-tokn-auth'), 
     
     path('product/<pk>/', views.ProductView.as_view(), name='product'),
+    path('cart/<pk>/', views.add_to_cart, name='add-to-cart'),
+    path('cart-items/', views.CartItemsView.as_view(), name='cart-items'),
     # API
     re_path(r'^api/products/$', views.ProductListAPIView.as_view(), name='products'),
     re_path(r'^api/products/(?P<pk>\d+)/$', views.ProductRetrieveAPIView.as_view(), name='product_detail'),    

@@ -67,15 +67,37 @@ class Product(models.Model):
     def __str__(self):
         return self.name   
 
+    def get_add_to_cart_url(self):
+        return reverse("accounts:add-to-cart", kwargs={
+            "pk" : self.pk
+        })
+        
 @receiver(pre_delete, sender=Product)
 def mymodel_delete(sender, instance, **kwargs):
     # Pass false so FileField doesn't save the model.
     instance.image.delete(False)
 
-class Order(models.Model):
-    userprofileinfo = models.ForeignKey(UserProfileInfo,related_name='orders',on_delete=models.DO_NOTHING,)        
-    product = models.ManyToManyField(Product)   
-    total_amount = models.IntegerField() 
+class OrderItem(models.Model):
+    user = models.ForeignKey(UserProfileInfo,
+                             on_delete=models.CASCADE)
+    ordered = models.BooleanField(default=False)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
 
     def __str__(self):
+        return f"{self.quantity} of {self.product.name}"      
+    def get_total_item_price(self):
+        return self.quantity * self.product.price
+        
+class Order(models.Model):
+    userprofileinfo = models.ForeignKey(UserProfileInfo,related_name='orders',on_delete=models.DO_NOTHING,)        
+    products = models.ManyToManyField(OrderItem)   
+    total_amount = models.IntegerField() 
+    ordered = models.BooleanField(default=False)
+    def __str__(self):
         return self.userprofileinfo.name   
+    def cal_total_amount(self):
+        total = 0
+        for order_item in self.products.all():
+            total += order_item.get_total_item_price()
+        return total  
