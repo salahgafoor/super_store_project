@@ -91,8 +91,7 @@ class OrderItem(models.Model):
         
 class Order(models.Model):
     userprofileinfo = models.ForeignKey(UserProfileInfo,related_name='orders',on_delete=models.DO_NOTHING,)        
-    products = models.ManyToManyField(OrderItem)   
-    total_amount = models.IntegerField() 
+    products = models.ManyToManyField(OrderItem)
     ordered = models.BooleanField(default=False)
     def __str__(self):
         return self.userprofileinfo.name   

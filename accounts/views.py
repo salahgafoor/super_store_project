@@ -23,7 +23,10 @@ class ProductView(DetailView):
 
 class PlaceOrderView(TemplateView):
     template_name = 'accounts/thank_you.html'   
-    
+
+class ContactUsView(TemplateView):
+    template_name = 'accounts/contact_us.html'
+
 class SignUp(CreateView):
     form_class = UserCreateForm
     success_url = reverse_lazy("accounts:login")

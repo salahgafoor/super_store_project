@@ -40,6 +40,7 @@ urlpatterns = [
     path('cart-items/', CartItemsView.as_view(), name='cart-items'),
     path('checkout/', CheckoutView.as_view(), name='checkout'),
     path('place-order/', PlaceOrderView.as_view(), name='place-order'),
+    path('contact-us/', ContactUsView.as_view(), name='contact-us'),
     # API
     re_path(r'^api/products/$', ProductListAPIView.as_view(), name='products'),
     re_path(r'^api/products/(?P<pk>\d+)/$', ProductRetrieveAPIView.as_view(), name='product_detail'),    
