@@ -130,14 +130,12 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
 MEDIA_ROOT = BASE_DIR / 'media'
-print(MEDIA_ROOT)
 MEDIA_URL = '/media/'
 
+#STATIC_ROOT = BASE_DIR / 'staticfiles'     # used for production
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-print(STATICFILES_DIRS)
 
 
 AUTH_USER_MODEL = 'accounts.UserProfileInfo'

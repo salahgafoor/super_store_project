@@ -104,35 +104,30 @@
           <div class="col-lg-3 col-md-6 mb-4">
 
             <!--Card-->
+            <a href="{{ product.get_absolute_url }}">
             <div class="card">
-
               <!--Card image-->
-              <div class="view overlay">
+              <div class="view overlay thumb-post">
                 <img src="{{ product.image.url }}" class="card-img-top" alt="">
-                <a>
-                  <div class="mask rgba-white-slight"></div>
-                </a>
               </div>
               <!--Card image-->
-
               <!--Card content-->
-              <a href="{{ product.get_absolute_url }}">
               <div class="card-body text-center">
                 <h5>
                   <strong>
-                    <span class="dark-grey-text">{{ product.name }}</span>
+                    <span class="lead">{{ product.name }}</span>
                   </strong>
                 </h5>
-
-                <h4 class="font-weight-bold blue-text">
+                <h4 class="lead">
                   <strong>&#8377;{{ product.price }}</strong>
                 </h4>
                 
               </div>
-              </a>
+
               <!--Card content-->
 
             </div>
+            </a>
             <!--Card-->
 
           </div>

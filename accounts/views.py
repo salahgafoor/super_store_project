@@ -1,20 +1,10 @@
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework import viewsets
-from rest_framework.response import Response
+from rest_framework import viewsets, filters, generics
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
-from rest_framework import filters
 import django_filters.rest_framework
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.renderers import TemplateHTMLRenderer
-from rest_framework import generics
-from .serializer import *
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from accounts import serializer, models, permissions
-from .permissions import IsOwnerAndAuth
 from django.views.generic import CreateView, ListView, DetailView
 from . import forms
 
@@ -51,7 +41,7 @@ class UserLoginApiView(ObtainAuthToken):
 class ProductListAPIView(generics.ListAPIView):
     #permission_classes = [IsAuthenticated]
     queryset = models.Product.objects.all()
-    serializer_class = ProductSerializer
+    serializer_class = serializer.ProductSerializer
     filter_backends = [
                     filters.SearchFilter, 
                     filters.OrderingFilter, 
@@ -65,7 +55,7 @@ class ProductListAPIView(generics.ListAPIView):
 
 class ProductRetrieveAPIView(generics.RetrieveAPIView):
     queryset = models.Product.objects.all()
-    serializer_class = ProductDetailSerializer
+    serializer_class = serializer.ProductDetailSerializer
 
 
 class OrderRetrieveAPIView(generics.RetrieveAPIView):
@@ -73,7 +63,7 @@ class OrderRetrieveAPIView(generics.RetrieveAPIView):
     #permission_classes = [IsOwnerAndAuth]
     model = models.Order
     queryset = models.Order.objects.all()
-    serializer_class = OrderDetailSerializer
+    serializer_class = serializer.OrderDetailSerializer
 
     def get_queryset(self, *args, **kwargs):
         return models.Order.objects.all() #filter(user__user=self.request.user)
@@ -84,7 +74,7 @@ class OrderListAPIView(generics.ListAPIView):
     #permission_classes = [IsOwnerAndAuth]
     model = models.Order
     queryset = models.Order.objects.all()
-    serializer_class = OrderDetailSerializer
+    serializer_class = serializer.OrderDetailSerializer
 
     def get_queryset(self, *args, **kwargs):
         print("Errrororo jhshdwewe")
@@ -93,13 +83,3 @@ class OrderListAPIView(generics.ListAPIView):
 
     def post(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
-        
-"""
-class Login(APIView):
-    renderer_classes = [TemplateHTMLRenderer]
-    template_name = 'accounts/login.html'
-
-    def get(self, request):
-        queryset = models.UserProfileInfo.objects.all()
-        return Response({'profiles': queryset})
-"""

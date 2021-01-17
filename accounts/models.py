@@ -2,7 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
-from django.conf import settings    #to import AUTH_USER_MODEL
+from django.db.models.signals import pre_delete
+from django.dispatch.dispatcher import receiver
+
 from django.urls  import reverse
 class UserProfileManager(BaseUserManager):
     """Manager for user profiles"""
@@ -64,7 +66,12 @@ class Product(models.Model):
         
     def __str__(self):
         return self.name   
-        
+
+@receiver(pre_delete, sender=Product)
+def mymodel_delete(sender, instance, **kwargs):
+    # Pass false so FileField doesn't save the model.
+    instance.image.delete(False)
+
 class Order(models.Model):
     userprofileinfo = models.ForeignKey(UserProfileInfo,related_name='orders',on_delete=models.DO_NOTHING,)        
     product = models.ManyToManyField(Product)   
