@@ -19,28 +19,30 @@ app_name = 'accounts'
 
 from rest_framework.routers import DefaultRouter
 
-from accounts import views
+from accounts.views import *
 from rest_framework.authtoken import views as rest_auth_views
 from django.contrib.auth import views as auth_views
 router = DefaultRouter()
-router.register('profile',views.UserProfileViewSet) 
+router.register('profile', UserProfileViewSet) 
 
 urlpatterns = [
     path('',include(router.urls)),
     # templates
-    re_path(r'^index/$',views.dashboardView.as_view(),name='dashboardView'),
+    re_path(r'^index/$',dashboardView.as_view(),name='dashboardView'),
     re_path(r'login/$', auth_views.LoginView.as_view(template_name="accounts/login.html"),name="login"),
     re_path(r'logout/$', auth_views.LogoutView.as_view(), name="logout"),    
-    re_path(r'signup/$', views.SignUp.as_view(), name="signup"),
-    path('login/', views.UserLoginApiView.as_view()),
+    re_path(r'signup/$', SignUp.as_view(), name="signup"),
+    path('login/', UserLoginApiView.as_view()),
     path('api-token-auth/', rest_auth_views.obtain_auth_token, name='api-tokn-auth'), 
     
-    path('product/<pk>/', views.ProductView.as_view(), name='product'),
-    path('cart/<pk>/', views.add_to_cart, name='add-to-cart'),
-    path('cart-items/', views.CartItemsView.as_view(), name='cart-items'),
+    path('product/<pk>/', ProductView.as_view(), name='product'),
+    path('cart/<pk>/', add_to_cart, name='add-to-cart'),
+    path('cart-items/', CartItemsView.as_view(), name='cart-items'),
+    path('checkout/', CheckoutView.as_view(), name='checkout'),
+    path('place-order/', PlaceOrderView.as_view(), name='place-order'),
     # API
-    re_path(r'^api/products/$', views.ProductListAPIView.as_view(), name='products'),
-    re_path(r'^api/products/(?P<pk>\d+)/$', views.ProductRetrieveAPIView.as_view(), name='product_detail'),    
-    re_path(r'^api/orders/$', views.OrderListAPIView.as_view(), name='orders_api'),
-    re_path(r'^api/orders/(?P<pk>\d+)/$', views.OrderRetrieveAPIView.as_view(), name='order_detail_api'),
+    re_path(r'^api/products/$', ProductListAPIView.as_view(), name='products'),
+    re_path(r'^api/products/(?P<pk>\d+)/$', ProductRetrieveAPIView.as_view(), name='product_detail'),    
+    re_path(r'^api/orders/$', OrderListAPIView.as_view(), name='orders_api'),
+    re_path(r'^api/orders/(?P<pk>\d+)/$', OrderRetrieveAPIView.as_view(), name='order_detail_api'),
 ]

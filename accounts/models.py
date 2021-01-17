@@ -4,7 +4,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
-
+from django_countries.fields import CountryField
 from django.urls  import reverse
 class UserProfileManager(BaseUserManager):
     """Manager for user profiles"""
@@ -101,3 +101,13 @@ class Order(models.Model):
         for order_item in self.products.all():
             total += order_item.get_total_item_price()
         return total  
+        
+class CheckoutAddress(models.Model):
+    user = models.ForeignKey(UserProfileInfo, on_delete=models.CASCADE)
+    street_address = models.CharField(max_length=100)
+    apartment_address = models.CharField(max_length=100)
+    country = CountryField(multiple=False)
+    pin = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.user.name        
