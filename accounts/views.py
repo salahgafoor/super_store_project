@@ -112,7 +112,7 @@ def add_to_cart(request, pk):
         order.products.add(order_item)
         return redirect("accounts:cart-items")
     else: 
-        order = Order.objects.create(user=request.user)
+        order = Order.objects.create(userprofileinfo=request.user)
         order.products.add(order_item)
         return redirect("accounts:cart-items")
     
