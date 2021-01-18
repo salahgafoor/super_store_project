@@ -55,7 +55,6 @@ class ProductSerializer(serializers.ModelSerializer):
             return None
 
 class ProductDetailSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField()
     class Meta:
         model = models.Product
         fields = [
@@ -87,7 +86,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         model = models.Order
         fields = [
             "name",
-            "product",
-            "total_amount",
+            "products",
+            "ordered",
         ]
                  

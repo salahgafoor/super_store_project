@@ -58,8 +58,8 @@ class ProductListAPIView(generics.ListAPIView):
                     filters.OrderingFilter, 
                     django_filters.rest_framework.DjangoFilterBackend,
                     ]
-    search_fields = ["title", "description"]
-    ordering_fields  = ["title", "id"]
+    search_fields = ["name", "description"]
+    ordering_fields  = ["name", "id"]
     #filter_class = ProductFilter
     #pagination_class = ProductPagination
 
@@ -88,8 +88,6 @@ class OrderListAPIView(generics.ListAPIView):
     serializer_class = serializer.OrderDetailSerializer
 
     def get_queryset(self, *args, **kwargs):
-        print("Errrororo jhshdwewe")
-        print(self.request)
         return Order.objects.all() #filter(user__user=self.request.userprofileinfo)
 
     def post(self, request, *args, **kwargs):
