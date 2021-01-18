@@ -46,6 +46,20 @@ api/products/                     : lists all the products
 api/products/(?P<pk>\d+)/$        : lists specific product with ID
 api/orders/$                      : lists all orders
 api/orders/(?P<pk>\d+)/$          : lists specific order
+
+^index/$
+login/$
+logout/$
+signup/$
+
+login/
+api-token-auth/
+product/<pk>/
+cart/<pk>/
+cart-items/
+checkout/
+place-order/
+contact-us/
 ```
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
