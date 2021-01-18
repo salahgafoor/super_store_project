@@ -39,6 +39,13 @@ V.Test on server
 ```bash
 python3 manage.py runserver
 ```
-
+## Features
+Serves Following APIs
+```bash
+api/products/                     : lists all the products
+api/products/(?P<pk>\d+)/$        : lists specific product with ID
+api/orders/$                      : lists all orders
+api/orders/(?P<pk>\d+)/$          : lists specific order
+```
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
